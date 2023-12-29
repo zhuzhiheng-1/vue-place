@@ -1,18 +1,31 @@
-// sidebar
-$menuText:#bfcbd9;
-$menuActiveText:#409EFF;
-$subMenuActiveText:#f4f4f5; //https://github.com/ElemeFE/element/issues/12951
+// 侧边栏样式配置
 
-$menuBg:#304156;
-$menuHover:#263445;
+// 菜单文本颜色
+$menuText: #bfcbd9;
 
-$subMenuBg:#1f2d3d;
-$subMenuHover:#001528;
+// 菜单激活状态下文本颜色
+$menuActiveText: #409EFF;
 
+// 子菜单激活状态下文本颜色
+$subMenuActiveText: #f4f4f5;
+
+// 菜单背景颜色
+$menuBg: #304156;
+
+// 菜单鼠标悬停状态下的背景颜色
+$menuHover: #263445;
+
+// 子菜单背景颜色
+$subMenuBg: #1f2d3d;
+
+// 子菜单鼠标悬停状态下的背景颜色
+$subMenuHover: #001528;
+
+// 侧边栏宽度
 $sideBarWidth: 210px;
 
-// the :export directive is the magic sauce for webpack
-// https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
+// :export 指令是将这些变量导出到 JavaScript 中的关键部分
+// 参考链接：https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
 :export {
   menuText: $menuText;
   menuActiveText: $menuActiveText;
