@@ -8,7 +8,7 @@ import getPageTitle from '@/utils/get-page-title'
 
 NProgress.configure({ showSpinner: false }) // NProgress 配置
 
-const whiteList = ['/login'] // 无需重定向白名单
+const whiteList = ['/login', '/register', '/404'] // 无需重定向白名单
 
 router.beforeEach(async(to, from, next) => {
   // 开启进度条
@@ -26,10 +26,7 @@ router.beforeEach(async(to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      // 确定用户是否通过getInfo获得了权限角色
-      console.log(store.getters.roles)
       const hasRoles = store.getters.roles && store.getters.roles.length > 0
-      console.log(hasRoles)
       if (hasRoles) {
         next()
       } else {

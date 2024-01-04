@@ -2,7 +2,7 @@
 import Cookies from 'js-cookie'
 
 // 定义存储 Token 的键名
-const TokenKey = 'vue_admin_template_token'
+const TokenKey = 'user_token'
 
 /**
  * 获取 Token

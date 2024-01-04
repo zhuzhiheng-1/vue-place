@@ -9,7 +9,14 @@ export function login(data) {
     data // 请求的数据，通常包含用户名和密码等信息
   })
 }
-
+// 用户注册
+export function register(data) {
+  return request({
+    url: '/vue-admin-template/user/register', // 请求的后端接口地址
+    method: 'post', // 请求方法为 POST
+    data // 请求的数据，通常包含用户名和密码等信息
+  })
+}
 // 获取用户信息请求
 export function getInfo(token) {
   return request({

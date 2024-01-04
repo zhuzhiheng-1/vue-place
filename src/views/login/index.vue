@@ -46,6 +46,7 @@
       <div class="tips">
         <span style="margin-right:20px;">username: admin</span>
         <span> password: any</span>
+        <span class="to-registerlink" @click="toRegister">没有账号，去注册</span>
       </div>
 
     </el-form>
@@ -74,8 +75,8 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '111111'
+        username: '',
+        password: ''
       },
       loginRules: {
         username: [{ required: true, trigger: 'blur', validator: validateUsername }],
@@ -95,6 +96,9 @@ export default {
     }
   },
   methods: {
+    toRegister() {
+      this.$router.push('/register')
+    },
     showPwd() {
       if (this.passwordType === 'password') {
         this.passwordType = ''
@@ -111,6 +115,10 @@ export default {
           this.loading = true
           this.$store.dispatch('user/login', this.loginForm).then(() => {
             this.$router.push({ path: this.redirect || '/' })
+            this.$message({
+              message: '登录成功',
+              type: 'success'
+            })
             this.loading = false
           }).catch(() => {
             this.loading = false
@@ -149,7 +157,7 @@ $cursor: #fff;
     input {
       background: transparent;
       border: 0px;
-      -webkit-appearance: none;
+      // -webkit-appearance: none;
       border-radius: 0px;
       padding: 12px 5px 12px 15px;
       color: $light_gray;
@@ -202,6 +210,15 @@ $light_gray:#eee;
         margin-right: 16px;
       }
     }
+    .to-registerlink {
+        color: #fff;
+        text-decoration: none;
+        margin-left: 113px;
+        cursor: pointer;
+      }
+      .to-registerlink:hover{
+        color: #409EFF;
+      }
   }
 
   .svg-container {

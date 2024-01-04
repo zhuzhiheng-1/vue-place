@@ -45,7 +45,6 @@ export const constantRoutes = [
     component: () => import('@/views/404'),
     hidden: true
   },
-
   {
     path: '/',
     component: Layout,
@@ -57,17 +56,6 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'el-icon-s-home' }
     }]
   }
-
-  // {
-  //   path: 'tutorial-link',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'https://www.runoob.com/cplusplus/cpp-classes-objects.html',
-  //       meta: { title: 'C++ 类与对象-教程', icon: 'link' }
-  //     }
-  //   ]
-  // }
 ]
 export const asyncRoutes = [
   {

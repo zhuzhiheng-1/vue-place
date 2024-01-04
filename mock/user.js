@@ -46,7 +46,43 @@ module.exports = [
       }
     }
   },
+  // user register
+  {
+    url: '/vue-admin-template/user/register',
+    type: 'post',
+    response: config => {
+      const { username } = config.body
 
+      // 如果用户已存在，则模拟注册失败
+      if (users[`${username}-token`]) {
+        return {
+          code: 409,
+          message: '用户名已存在'
+        }
+      } else {
+        // 用户不存在，模拟注册成功
+        const newUserToken = `${username}-token`
+        // 将新用户的 token 存储到 tokens 对象中
+        tokens[username] = {
+          token: newUserToken
+        }
+        users[newUserToken] = {
+          roles: ['editor'],
+          introduction: `I am a new user - ${username}`,
+          avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
+          name: `New User - ${username}`
+        }
+
+        // 返回新用户的 token
+        return {
+          code: 20000,
+          data: {
+            token: newUserToken
+          }
+        }
+      }
+    }
+  },
   // get user info
   {
     url: '/vue-admin-template/user/info\.*',

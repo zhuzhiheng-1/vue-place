@@ -1,5 +1,5 @@
 // 引入与用户相关的 API 方法
-import { login, logout, getInfo } from '@/api/user'
+import { login, logout, getInfo, register } from '@/api/user'
 // 引入与用户认证相关的工具方法
 import { getToken, setToken, removeToken } from '@/utils/auth'
 // 引入路由重置方法
@@ -61,7 +61,23 @@ const actions = {
       })
     })
   },
-
+  // 用户注册
+  register({ commit }, userInfo) {
+    const { username, password } = userInfo
+    return new Promise((resolve, reject) => {
+      // 调用注册 API 方法，传递用户名和密码
+      register({ username: username.trim(), password: password }).then(response => {
+        const { data } = response
+        // 提交 mutation 设置 token
+        commit('SET_TOKEN', data.token)
+        // 将 token 保存到本地
+        setToken(data.token)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
   // 获取用户信息
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
@@ -76,7 +92,6 @@ const actions = {
         if (data.roles && data.roles.length > 0) {
           // 从后端获取到用户角色
           commit('SET_ROLES', data.roles)
-          console.log(data.roles)
         } else {
           reject('getInfo: roles must be a non-null array!')
         }
