@@ -26,13 +26,19 @@ router.beforeEach(async(to, from, next) => {
       next({ path: '/' })
       NProgress.done()
     } else {
-      const hasGetUserInfo = store.getters.name
-      if (hasGetUserInfo) {
+      // 确定用户是否通过getInfo获得了权限角色
+      console.log(store.getters.roles)
+      const hasRoles = store.getters.roles && store.getters.roles.length > 0
+      console.log(hasRoles)
+      if (hasRoles) {
         next()
       } else {
         try {
-          // 获取用户信息
-          await store.dispatch('user/getInfo')
+          // 获取roles
+          const data = await store.dispatch('user/getInfo')
+          const accessRoutes = await store.dispatch('permission/generateRoutes', data.roles)
+          router.options.routes = store.getters.permission_routes
+          router.addRoutes(accessRoutes)
           next()
         } catch (error) {
           // 移除 token 并跳转到登录页面重新登录

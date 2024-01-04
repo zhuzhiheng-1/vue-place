@@ -1,6 +1,7 @@
 <template>
   <div class="home-container">
     <div class="home-text">name: {{ name }}</div>
+    <h1>C++仿真实验平台</h1>
   </div>
 </template>
 

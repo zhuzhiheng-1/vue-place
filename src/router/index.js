@@ -52,26 +52,126 @@ export const constantRoutes = [
       component: () => import('@/views/home/index'),
       meta: { title: '首页', icon: 'el-icon-s-home' }
     }]
+  }
+
+  // {
+  //   path: 'tutorial-link',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'https://www.runoob.com/cplusplus/cpp-classes-objects.html',
+  //       meta: { title: 'C++ 类与对象-教程', icon: 'link' }
+  //     }
+  //   ]
+  // }
+]
+export const asyncRoutes = [
+  {
+    path: '/experiment',
+    component: Layout,
+    redirect: '/experiment/theoretical',
+    name: 'Experiment',
+    meta: { title: '实验内容', icon: 'el-icon-s-help', roles: ['admin', 'editor'] },
+    children: [
+      {
+        path: 'theoretical',
+        name: 'Theoretical',
+        component: () => import('@/views/experiment/theoretical/index'),
+        meta: { title: '理论实验', icon: 'el-icon-s-flag', roles: ['admin', 'editor'] }
+      },
+      {
+        path: 'basic',
+        name: 'Basic',
+        component: () => import('@/views/experiment/basic/index'),
+        meta: { title: '基础实验', icon: 'el-icon-s-flag', roles: ['admin', 'editor'] }
+      },
+      {
+        path: 'extension',
+        name: 'Extension',
+        component: () => import('@/views/experiment/extension/index'),
+        meta: { title: '拓展实验', icon: 'el-icon-s-flag', roles: ['admin', 'editor'] }
+      }
+    ]
   },
 
   {
-    path: '/example',
+    path: '/scores',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'el-icon-s-help' },
+    redirect: '/scores/theoretical',
+    name: 'Scores',
+    meta: { title: '实验成绩', icon: 'el-icon-s-marketing', roles: ['admin', 'editor'] },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
+        path: 'theoretical',
+        name: 'TheoreticalScores',
+        component: () => import('@/views/scores/theoretical/index'),
+        meta: { title: '理论实验成绩', icon: 'el-icon-s-flag', roles: ['admin', 'editor'] }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
+        path: 'basic',
+        name: 'BasicScores',
+        component: () => import('@/views/scores/basic/index'),
+        meta: { title: '基础实验成绩', icon: 'el-icon-s-flag', roles: ['admin', 'editor'] }
+      },
+      {
+        path: 'extension',
+        name: 'ExtensionScores',
+        component: () => import('@/views/scores/extension/index'),
+        meta: { title: '拓展实验成绩', icon: 'el-icon-s-flag', roles: ['admin', 'editor'] }
+      },
+      {
+        path: 'total',
+        name: 'TotalScores',
+        component: () => import('@/views/scores/total/index'),
+        meta: { title: '总分', icon: 'el-icon-s-flag', roles: ['admin', 'editor'] }
+      }
+    ]
+  },
+
+  {
+    path: '/user',
+    component: Layout,
+    redirect: '/user/teacher-list',
+    name: 'User',
+    meta: { title: '用户管理', icon: 'el-icon-user', roles: ['admin'] },
+    children: [
+      {
+        path: 'teacher-list',
+        name: 'TeacherList',
+        component: () => import('@/views/user/teacher-list/index'),
+        meta: { title: '教师列表', icon: 'el-icon-user', roles: ['admin'] }
+      },
+      {
+        path: 'student-list',
+        name: 'studentList',
+        component: () => import('@/views/user/student-list/index'),
+        meta: { title: '学生列表', icon: 'el-icon-user', roles: ['admin'] }
+      }
+    ]
+  },
+  {
+    path: '/grades',
+    component: Layout,
+    meta: { icon: 'el-icon-s-marketing', roles: ['admin'] },
+    children: [
+      {
+        path: 'index',
+        name: 'Grades',
+        component: () => import('@/views/grades/index'),
+        meta: { title: '成绩查询', icon: 'el-icon-s-flag', roles: ['admin'] }
+      }
+    ]
+  },
+  {
+    path: '/table',
+    component: Layout,
+    meta: { icon: 'el-icon-s-help', roles: ['admin', 'editor'] },
+    children: [
+      {
+        path: 'index',
+        name: 'Table',
+        component: () => import('@/views/table/index'),
+        meta: { title: 'Table', icon: 'table', roles: ['admin', 'editor'] }
       }
     ]
   },
@@ -79,88 +179,28 @@ export const constantRoutes = [
   {
     path: '/form',
     component: Layout,
+    meta: { roles: ['admin', 'editor'] },
     children: [
       {
         path: 'index',
         name: 'Form',
         component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
+        meta: { title: 'Form', icon: 'form', roles: ['admin', 'editor'] }
       }
     ]
   },
-
+  // 404 页面必须放在最后
+  { path: '*', redirect: '/404', hidden: true },
   {
-    path: '/nested',
-    component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: 'Nested',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: 'menu2' }
-      }
-    ]
-  },
-
-  {
-    path: 'external-link',
+    path: 'tutorial-link',
     component: Layout,
     children: [
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+        path: 'https://www.runoob.com/cplusplus/cpp-classes-objects.html',
+        meta: { title: 'C++ 类与对象-教程', icon: 'link' }
       }
     ]
-  },
-
-  // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+  }
 ]
 
 // 创建路由实例
@@ -185,3 +225,4 @@ export function resetRouter() {
 }
 
 export default router
+

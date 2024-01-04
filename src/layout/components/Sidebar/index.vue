@@ -18,7 +18,7 @@
         mode="vertical"
       >
         <!-- 遍历路由数组，渲染 SidebarItem 组件 -->
-        <sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path" />
+        <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
   </div>
@@ -35,7 +35,8 @@ export default {
   computed: {
     // 使用 mapGetters 导入 'sidebar' 模块的 getter
     ...mapGetters([
-      'sidebar'
+      'sidebar',
+      'permission_routes'
     ]),
     // 获取路由数组
     routes() {

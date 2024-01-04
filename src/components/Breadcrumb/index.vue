@@ -39,15 +39,15 @@ export default {
       let matched = this.$route.matched.filter(item => item.meta && item.meta.title)
       const first = matched[0]
 
-      // 如果第一个匹配项不是Home，则在数组开头添加默认的Home路由
+      // 如果第一个匹配项不是首页，则在数组开头添加默认的首页路由
       if (!this.isHome(first)) {
-        matched = [{ path: '/home', meta: { title: 'Home' }}].concat(matched)
+        matched = [{ path: '/home', meta: { title: '首页' }}].concat(matched)
       }
 
       // 过滤需要显示的面包屑项
       this.levelList = matched.filter(item => item.meta && item.meta.title && item.meta.breadcrumb !== false)
     },
-    // 判断是否为Home
+    // 判断是否为首页
     isHome(route) {
       const name = route && route.name
       if (!name) {

@@ -12,7 +12,13 @@ const getters = {
   avatar: state => state.user.avatar,
 
   // 获取用户的用户名
-  name: state => state.user.name
+  name: state => state.user.name,
+
+  // 获取用户角色信息
+  roles: state => state.user.roles,
+
+  // 筛选过的路由
+  permission_routes: state => state.permission.routes
 }
 
 export default getters

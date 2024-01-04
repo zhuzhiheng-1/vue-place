@@ -10,7 +10,8 @@ const getDefaultState = () => {
   return {
     token: getToken(), // 使用工具方法获取保存在本地的 token
     name: '', // 用户名
-    avatar: '' // 用户头像
+    avatar: '', // 用户头像
+    roles: [] // 用户角色
   }
 }
 
@@ -34,6 +35,10 @@ const mutations = {
   // 设置用户头像
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  // 设置用户角色
+  SET_ROLES: (state, roles) => {
+    state.roles = roles
   }
 }
 
@@ -67,6 +72,13 @@ const actions = {
         if (!data) {
           // 如果获取不到有效的用户信息，拒绝 Promise，并返回错误信息
           return reject('Verification failed, please Login again.')
+        }
+        if (data.roles && data.roles.length > 0) {
+          // 从后端获取到用户角色
+          commit('SET_ROLES', data.roles)
+          console.log(data.roles)
+        } else {
+          reject('getInfo: roles must be a non-null array!')
         }
 
         const { name, avatar } = data
