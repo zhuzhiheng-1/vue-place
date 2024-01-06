@@ -1,3 +1,4 @@
+
 const getters = {
   // 获取应用的侧边栏状态
   sidebar: state => state.app.sidebar,
@@ -18,7 +19,16 @@ const getters = {
   roles: state => state.user.roles,
 
   // 筛选过的路由
-  permission_routes: state => state.permission.routes
+  permission_routes: state => state.permission.routes,
+
+  // 获取理论实验列表
+  experimentsTheoretical: state => state.experiments.experimentsTheoretical,
+
+  // 获取基础实验列表
+  experimentsBasic: state => state.experiments.experimentsBasic,
+
+  // 获取扩展实验列表
+  experimentsExtension: state => state.experiments.experimentsExtension
 }
 
 export default getters
