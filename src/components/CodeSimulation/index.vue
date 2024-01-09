@@ -2,12 +2,7 @@
   <div class="code-editor my-code-editor">
 
     <div class="code-animation">
-      <codemirror
-        ref="myCodeMirror"
-        v-model="code"
-        class="my-code-mirror"
-        :options="editorOptions"
-      />
+      <codemirror ref="myCodeMirror" v-model="code" class="my-code-mirror" :options="editorOptions" />
       <div class="animation-container">
         <div class="animation-step">
           <p>{{ getCurrentStepInfo() }}</p>
@@ -19,12 +14,7 @@
     </div>
 
     <div class="button-container">
-      <el-button
-        type="text"
-        :disabled="currentMarkedIndex === 0"
-        class="step-button"
-        @click="markPrevLine"
-      >
+      <el-button type="text" :disabled="currentMarkedIndex === 0" class="step-button" @click="markPrevLine">
         上一步
       </el-button>
 
@@ -40,7 +30,7 @@
 
       <el-button
         type="text"
-        :disabled="currentMarkedIndex === markedLines.length-1"
+        :disabled="currentMarkedIndex === markedLines.length - 1"
         class="step-button"
         @click="markNextLine"
       >
@@ -294,28 +284,31 @@ export default {
 }
 </script>
 
-  <!-- <style lang="less" scoped>
-  .my-code-editor {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-  }
-  .code-animation {
-    display: flex;
-    flex-direction: row;
-    height: 100%;
-  }
-  .my-code-mirror {
-      width: 50%;
-    }
-  .code-editor ::v-deep .CodeMirror-wrap {
+<style lang="scss" scoped>
+.my-code-editor {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.code-animation {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+}
+
+.my-code-mirror {
+  width: 50%;
+}
+
+.code-editor ::v-deep .CodeMirror-wrap {
   margin-top: 10px;
   height: 80vh;
   overflow: hidden;
   border: #a364ff 2px solid;
-  }
+}
 
-  .code-editor ::v-deep .marked-gutter::before {
+.code-editor ::v-deep .marked-gutter::before {
   margin-top: 2px;
   content: '→';
   display: block;
@@ -323,196 +316,94 @@ export default {
   height: 10px;
   line-height: 10px;
   background-color: rgb(237, 237, 29);
-  color: #ea420f; /* 箭头的颜色 */
-  }
+  color: #ea420f;
+  /* 箭头的颜色 */
+}
 
-  .my-code-editor ::v-deep .CodeMirror-gutters {
+.my-code-editor ::v-deep .CodeMirror-gutters {
   background-color: rgb(57, 39, 54);
-  }
-  .button-container {
+}
+
+.button-container {
   margin-top: 20px;
   display: flex;
   align-items: center;
   height: 12vh;
-  }
+}
 
-  .step-button {
+.step-button {
   margin: 0 10px;
   color: #ffffff;
-  background-color:#a364ff;
-  }
-  .step-button:hover{
-  background-color:  #cb80ff;
+  background-color: #a364ff;
+}
+
+.step-button:hover {
+  background-color: #cb80ff;
   color: #161515;
-  }
+}
 
-  .custom-steps {
+.custom-steps {
   flex-grow: 1;
-  }
-  .custom-steps ::v-deep .active-step .el-step__title.is-process {
-  color:#a364ff;
-  }
+}
 
-  /* 动画区 */
-  .animation-container {
-    margin: 10px 10px 10px 10px;
+.custom-steps ::v-deep .active-step .el-step__title.is-process {
+  color: #a364ff;
+}
+
+/* 动画区 */
+.animation-container {
+  margin: 10px 10px 10px 10px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+
+  .animation-step {
+    border-radius: 20px;
+    background: linear-gradient(to right, #9e67f1 0%, #cb80ff 100%);
     display: flex;
-    flex: 1;
     flex-direction: column;
-    .animation-step {
-      border-radius: 20px;
-      background: linear-gradient(to right, #9e67f1 0%, #cb80ff 100%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 10%;
-      p{
-        font-size: 20px;
-        font-weight: bold;
-        color: #ffffff;
-      }
-    }
-    .animation-place{
-      margin-top: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 90%;
-      background-color: #4d425f;
-      border-radius: 20px;
-      p{
-        font-size: 20px;
-        font-weight: bold;
-        color: #ffffff;
-      }
-    }
-  }
+    align-items: center;
+    justify-content: center;
+    height: 10%;
 
-  /* 当你在组件的 <style> 标签中使用 scoped 属性时，Vue.js 会为样式添加一个唯一的标识符，确保这些样式只应用在当前组件内，以防止全局样式冲突。
-  需要在组件内部访问子组件的 DOM 元素或者样式，而 scoped 样式默认不会渗透到子组件中。这时，深度选择器 ::v-deep 或 >>>
-  需要在组件内部访问子组件的 DOM 元素或者样式，而 scoped 样式默认不会渗透到子组件中。这时，深度选择器 ::v-deep 或 >>> 就变得有用了。
-  在复杂的应用中，可能存在多个组件嵌套的情况，每个组件都有自己的 scoped 样式。为了避免样式冲突，需要在组件内穿透样式以确保正确的样式应用。
-  递归地为 ::v-deep 或 >>> 后面的每个选择器添加一个额外的属性，以确保样式规则能够穿透到子组件的 DOM 结构中。
-  确保了样式规则在局部是唯一的，同时穿透到了子组件的 DOM 结构中 */
-
-  /* ::v-deep .CodeMirror-gutter  {
-  background-color: rgb(0, 0, 0) !important;
-  } */
-  /* ::v-deep.CodeMirror-gutter.marked {
-  color: yellow !important;
-  }
-  ::v-deep.marked-gutter {
-  background-color: yellow;
-  } */
-  </style> -->
-  <style lang="scss" scoped>
-  .my-code-editor {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-
-    .code-animation {
-      display: flex;
-      flex-direction: row;
-      height: 100%;
-    }
-
-    .my-code-mirror {
-      width: 50%;
-    }
-
-    .code-editor {
-      & ::v-deep .CodeMirror-wrap {
-        margin-top: 10px;
-        height: 80vh;
-        overflow: hidden;
-        border: #a364ff 2px solid;
-      }
-
-      & ::v-deep .marked-gutter::before {
-        margin-top: 2px;
-        content: '→';
-        display: block;
-        width: 15px;
-        height: 10px;
-        line-height: 10px;
-        background-color: rgb(237, 237, 29);
-        color: #ea420f;
-      }
-
-      .my-code-editor ::v-deep .CodeMirror-gutters {
-        background-color: rgb(57, 39, 54);
-      }
-    }
-
-    .button-container {
-      margin-top: 20px;
-      display: flex;
-      align-items: center;
-      height: 12vh;
-    }
-
-    .step-button {
-      margin: 0 10px;
+    p {
+      font-size: 20px;
+      font-weight: bold;
       color: #ffffff;
-      background-color: #a364ff;
-
-      &:hover {
-        background-color: #cb80ff;
-        color: #161515;
-      }
-    }
-
-    .custom-steps {
-      flex-grow: 1;
-
-      & ::v-deep .active-step .el-step__title.is-process {
-        color: #a364ff;
-      }
-    }
-
-    /* 动画区 */
-    .animation-container {
-      margin: 10px 10px 10px 10px;
-      display: flex;
-      flex: 1;
-      flex-direction: column;
-
-      .animation-step {
-        border-radius: 20px;
-        background: linear-gradient(to right, #9e67f1 0%, #cb80ff 100%);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 10%;
-
-        p {
-          font-size: 20px;
-          font-weight: bold;
-          color: #ffffff;
-        }
-      }
-
-      .animation-place {
-        margin-top: 10px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 90%;
-        background-color: #4d425f;
-        border-radius: 20px;
-
-        p {
-          font-size: 20px;
-          font-weight: bold;
-          color: #ffffff;
-        }
-      }
     }
   }
-</style>
 
+  .animation-place {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 90%;
+    background-color: #4d425f;
+    border-radius: 20px;
+
+    p {
+      font-size: 20px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+  }
+}
+</style>
+<!-- /* 当你在组件的 <style> 标签中使用 scoped 属性时，Vue.js 会为样式添加一个唯一的标识符，确保这些样式只应用在当前组件内，以防止全局样式冲突。
+需要在组件内部访问子组件的 DOM 元素或者样式，而 scoped 样式默认不会渗透到子组件中。这时，深度选择器 ::v-deep 或 >>>
+需要在组件内部访问子组件的 DOM 元素或者样式，而 scoped 样式默认不会渗透到子组件中。这时，深度选择器 ::v-deep 或 >>> 就变得有用了。
+在复杂的应用中，可能存在多个组件嵌套的情况，每个组件都有自己的 scoped 样式。为了避免样式冲突，需要在组件内穿透样式以确保正确的样式应用。
+递归地为 ::v-deep 或 >>> 后面的每个选择器添加一个额外的属性，以确保样式规则能够穿透到子组件的 DOM 结构中。
+确保了样式规则在局部是唯一的，同时穿透到了子组件的 DOM 结构中 */
+
+/* ::v-deep .CodeMirror-gutter  {
+background-color: rgb(0, 0, 0) !important;
+} */
+/* ::v-deep.CodeMirror-gutter.marked {
+color: yellow !important;
+}
+::v-deep.marked-gutter {
+background-color: yellow;
+} */ -->
