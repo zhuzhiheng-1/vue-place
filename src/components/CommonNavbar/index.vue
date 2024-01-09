@@ -14,25 +14,40 @@
     <div class="content-wrapper">
       <!-- 内容承接处 -->
       <experiment-content
-        v-if="selectedExperiment"
+        v-if="selectedExperiment && !showSelectQuestionPage && !showCodeSimulationPage && !showCodeDragPage"
         :title="selectedExperiment.title"
         :content="selectedExperiment.content"
       />
+      <!-- 选择题 -->
+      <select-question v-if="showSelectQuestionPage" />
+      <!-- 代码仿真 -->
+      <code-simulation v-if="showCodeSimulationPage" />
+      <!-- 代码拖拽 -->
+      <code-drag v-if="showCodeDragPage" />
     </div>
   </div>
 </template>
 
 <script>
 import ExperimentContent from '@/components/ExperimentContent'
+import SelectQuestion from '@/components/SelectQuestion'
+import CodeSimulation from '@/components/CodeSimulation'
+import CodeDrag from '@/components/CodeDrag'
 import { mapGetters } from 'vuex'
 export default {
   components: {
-    ExperimentContent
+    ExperimentContent,
+    SelectQuestion,
+    CodeSimulation,
+    CodeDrag
   },
   data() {
     return {
       activeIndex: '1',
-      selectedExperiment: null
+      selectedExperiment: null,
+      showSelectQuestionPage: false,
+      showCodeSimulationPage: false,
+      showCodeDragPage: false
     }
   },
   computed: {
@@ -63,12 +78,25 @@ export default {
     handleSelect(index) {
       this.activeIndex = index
       this.selectExperimentByIndex(index)
+      this.showSelectQuestionPage = false // 重置为false
+      this.showCodeSimulationPage = false
+      this.showCodeDragPage = false
     },
     choiceHandle() {
       console.log('choiceHandle')
-      // 这里可以添加其他逻辑
+      const getterResult = this.currentGetter
+      console.log('Getter Result:', getterResult)
+      if (getterResult === 'experimentsTheoretical') {
+        this.showSelectQuestionPage = true
+      } else if (getterResult === 'experimentsBasic') {
+        this.showCodeSimulationPage = true
+      } else if (getterResult === 'experimentsExtension') {
+        this.showCodeDragPage = true
+      }
+      this.activeIndex = null// 重置为null，取消所有导航项的激活状态
     },
     selectExperimentByIndex(index) {
+      // eg. this['experimentsTheoretical'] 就是获取到这个函数。
       const experiments = this[this.currentGetter]
       this.selectedExperiment = experiments.find(exp => exp.index === index)
     }
