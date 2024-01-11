@@ -10,33 +10,28 @@
     >
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">
-          {{ scope.$index }}
+          {{ scope.row.id }} <!-- 显示第几次做题的ID -->
         </template>
       </el-table-column>
-      <el-table-column label="Title">
+      <el-table-column label="用户名">
         <template slot-scope="scope">
-          {{ scope.row.title }}
+          {{ scope.row.username }} <!-- 显示用户名 -->
         </template>
       </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Pageviews" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" label="Status" width="110" align="center">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="Display_time" width="200">
+      <el-table-column align="center" prop="submit_time" label="提交时间" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time" />
-          <span>{{ scope.row.display_time }}</span>
+          <span>{{ scope.row.submit_time }}</span> <!-- 显示提交时间 -->
+        </template>
+      </el-table-column>
+      <el-table-column label="理论实验得分" width="110" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.score }} <!-- 显示得分情况 -->
+        </template>
+      </el-table-column>
+      <el-table-column label="是否放弃" width="110" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.abandoned ? 'Yes' : 'No' }} <!-- 显示是否放弃，如果是 true 显示 Yes，否则显示 No -->
         </template>
       </el-table-column>
     </el-table>
@@ -44,19 +39,9 @@
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import { getTheoreticalScore } from '@/api/score'
 
 export default {
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
   data() {
     return {
       list: null,
@@ -69,8 +54,8 @@ export default {
   methods: {
     fetchData() {
       this.listLoading = true
-      getList().then(response => {
-        this.list = response.data.items
+      getTheoreticalScore().then(response => {
+        this.list = response.data.TheoreticalScore
         this.listLoading = false
       })
     }
