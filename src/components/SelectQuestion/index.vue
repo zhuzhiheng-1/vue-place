@@ -230,7 +230,7 @@ export default {
 
 <style scoped>
 .choice-page {
-    background-color: aliceblue;
+    background-color: #eee;
     width: 100%;
     height: 100%;
     display: flex;
@@ -244,6 +244,7 @@ export default {
     width: 100%;
     height: 100%;
     margin-left: 100px;
+    margin-bottom: 20px; /* 增加底部间距 */
 }
 .choice-introduce{
     margin-left: 100px;
@@ -254,18 +255,15 @@ export default {
     display: flex;
     flex-direction: column;
 }
-.submit-button{
-    width: 200px;
-    height: 50px;
-    border-radius: 10px;
-}
-.reset-button{
-    width: 200px;
-    height: 50px;
-    border-radius: 10px;
+.submit-button, .reset-button{
+    width: 150px;
+    height: 40px;
+    border-radius: 5px;
+    margin: 0 10px;
 }
 .button-container{
     display: flex;
     justify-content: center;
+    margin-top: 20px;
 }
 </style>

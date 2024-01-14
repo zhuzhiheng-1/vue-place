@@ -11,6 +11,8 @@ import settings from './modules/settings'
 import user from './modules/user'
 import permission from './modules/permission'
 import experiments from './modules/experiments'
+import markedList from './modules/markedList'
+import animation from './modules/animation'
 
 // 在 Vue 中启用 Vuex
 Vue.use(Vuex)
@@ -23,7 +25,9 @@ const store = new Vuex.Store({
     settings,
     user,
     permission,
-    experiments
+    experiments,
+    markedList,
+    animation
   },
   // 全局的 getter 函数
   getters

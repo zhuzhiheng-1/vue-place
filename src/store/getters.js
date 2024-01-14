@@ -28,7 +28,13 @@ const getters = {
   experimentsBasic: state => state.experiments.experimentsBasic,
 
   // 获取扩展实验列表
-  experimentsExtension: state => state.experiments.experimentsExtension
+  experimentsExtension: state => state.experiments.experimentsExtension,
+
+  // 获取markedLines
+  markedLines: state => state.markedList.markedLines,
+
+  // 获取动画的frames
+  frames: state => state.animation.frames
 }
 
 export default getters

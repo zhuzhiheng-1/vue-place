@@ -1,5 +1,5 @@
 <template>
-  <div class="code-editor my-code-editor">
+  <div class="code-editor">
 
     <div class="code-animation">
       <codemirror ref="myCodeMirror" v-model="code" class="my-code-mirror" :options="editorOptions" />
@@ -8,7 +8,7 @@
           <p>{{ getCurrentStepInfo() }}</p>
         </div>
         <div class="animation-place">
-          <!-- code在内存的动画 -->
+          <animation ref="animationRef" :current-frame="currentFrame" :frames="frames" />
         </div>
       </div>
     </div>
@@ -41,9 +41,11 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 // 导入 CodeMirror 组件
 import { codemirror } from 'vue-codemirror'
-
+// 导入动画组件
+import Animation from '@/components/Animation/index.vue'
 // 导入样式、主题、代码风格等配置或样式文件
 import '@/utils/cm-setting'
 
@@ -51,7 +53,8 @@ import '@/utils/cm-setting'
 export default {
   // 注册使用的组件
   components: {
-    codemirror
+    codemirror,
+    Animation
   },
   // 数据对象，返回默认数据
   data() {
@@ -164,29 +167,19 @@ export default {
         lineWrapping: true, // 自动换行配置
         gutters: ['my-gutter'] // gutter 配置
       },
-      // 需要标记的行号数组
-      markedLines: [
-        { stepInfo: '执行main函数', whichLine: 73 },
-        { stepInfo: '创建对象，传入动态分配内存的数据', whichLine: 75 },
-        { stepInfo: '执行构造函数', whichLine: 16 },
-        { stepInfo: '在堆区动态分配内存，并将 dynamicData 指向这块内存', whichLine: 22 },
-        { stepInfo: '直接访问对象的属性', whichLine: 78 },
-        { stepInfo: '调用公有方法，用于获取私有属性', whichLine: 68 },
-        { stepInfo: '创建对象指针', whichLine: 80 },
-        { stepInfo: '执行构造函数', whichLine: 16 },
-        { stepInfo: '在堆区动态分配内存，并将 dynamicData 指向这块内存', whichLine: 22 },
-        { stepInfo: '使用对象指针访问对象的属性', whichLine: 83 },
-        { stepInfo: '浅拷贝', whichLine: 86 },
-        { stepInfo: '拷贝构造函数 - 浅拷贝', whichLine: 39 },
-        { stepInfo: '深拷贝', whichLine: 89 },
-        { stepInfo: '拷贝构造函数 - 深拷贝', whichLine: 55 },
-        { stepInfo: '深拷贝 dynamicData,分配新的内存并复制数据', whichLine: 61 },
-        { stepInfo: '释放动态分配的内存', whichLine: 92 },
-        { stepInfo: 'return 0', whichLine: 94 }
-      ],
-
       // 当前标记的行号索引
       currentMarkedIndex: 0
+    }
+  },
+  computed: {
+    ...mapGetters([
+      'markedLines'
+    ])
+  },
+  watch: {
+    currentFrame(newFrame) {
+      // Update the current frame in the child component
+      this.$refs.animationRef.setCurrentFrame(newFrame)
     }
   },
   // 组件挂载后调用
@@ -221,6 +214,7 @@ export default {
         this.currentMarkedIndex--
         this.updateGutterMarker()
         this.scrollToCurrentLine()
+        this.$refs.animationRef.prevFrame()
       }
     },
     // 标记下一行
@@ -231,6 +225,7 @@ export default {
         this.currentMarkedIndex++
         this.updateGutterMarker()
         this.scrollToCurrentLine()
+        this.$refs.animationRef.nextFrame()
       }
     },
     // 移除标记
@@ -285,7 +280,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.my-code-editor {
+.code-editor {
   display: flex;
   width: 100%;
   flex-direction: column;
@@ -295,17 +290,17 @@ export default {
   display: flex;
   flex-direction: row;
   height: 100%;
+  width: 100%;
 }
-
-.my-code-mirror {
-  width: 50%;
+.my-code-mirror{
+  flex: 1;
 }
 
 .code-editor ::v-deep .CodeMirror-wrap {
   margin-top: 10px;
   height: 80vh;
   overflow: hidden;
-  border: #a364ff 2px solid;
+  border: #304156 2px solid;
 }
 
 .code-editor ::v-deep .marked-gutter::before {
@@ -320,8 +315,8 @@ export default {
   /* 箭头的颜色 */
 }
 
-.my-code-editor ::v-deep .CodeMirror-gutters {
-  background-color: rgb(57, 39, 54);
+.code-editor ::v-deep .CodeMirror-gutters {
+  background-color: #304156
 }
 
 .button-container {
@@ -334,12 +329,12 @@ export default {
 .step-button {
   margin: 0 10px;
   color: #ffffff;
-  background-color: #a364ff;
+  background-color: #304156;
 }
 
 .step-button:hover {
-  background-color: #cb80ff;
-  color: #161515;
+  background-color: #304156;
+  color: #ffffff;
 }
 
 .custom-steps {
@@ -347,19 +342,19 @@ export default {
 }
 
 .custom-steps ::v-deep .active-step .el-step__title.is-process {
-  color: #a364ff;
+  color:#304156
 }
 
-/* 动画区 */
+/* 动画容器 */
 .animation-container {
   margin: 10px 10px 10px 10px;
   display: flex;
-  flex: 1;
   flex-direction: column;
-
+  flex: 1;
+  // 说明区
   .animation-step {
     border-radius: 20px;
-    background: linear-gradient(to right, #9e67f1 0%, #cb80ff 100%);
+    background: #304156;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -372,22 +367,12 @@ export default {
       color: #ffffff;
     }
   }
-
+  // 动画区
   .animation-place {
     margin-top: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
     height: 90%;
-    background-color: #4d425f;
+    background-color: #304156;
     border-radius: 20px;
-
-    p {
-      font-size: 20px;
-      font-weight: bold;
-      color: #ffffff;
-    }
   }
 }
 </style>

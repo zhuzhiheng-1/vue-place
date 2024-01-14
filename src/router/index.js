@@ -155,29 +155,15 @@ export const asyncRoutes = [
     ]
   },
   {
-    path: '/table',
-    component: Layout,
-    meta: { icon: 'el-icon-s-help', roles: ['admin', 'editor'] },
-    children: [
-      {
-        path: 'index',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table', roles: ['admin', 'editor'] }
-      }
-    ]
-  },
-
-  {
     path: '/form',
     component: Layout,
-    meta: { roles: ['admin', 'editor'] },
+    meta: { roles: ['admin'] },
     children: [
       {
         path: 'index',
         name: 'Form',
         component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form', roles: ['admin', 'editor'] }
+        meta: { title: 'Form', icon: 'form', roles: ['admin'] }
       }
     ]
   },
