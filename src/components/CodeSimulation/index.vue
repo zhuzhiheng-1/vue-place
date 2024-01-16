@@ -2,7 +2,7 @@
   <div class="code-editor">
 
     <div class="code-animation">
-      <codemirror ref="myCodeMirror" v-model="code" class="my-code-mirror" :options="editorOptions" />
+      <codemirror ref="myCodeMirror" v-model="simulationcode" class="my-code-mirror" :options="editorOptions" />
       <div class="animation-container">
         <div class="animation-step">
           <p>{{ getCurrentStepInfo() }}</p>
@@ -59,105 +59,8 @@ export default {
   // 数据对象，返回默认数据
   data() {
     return {
+      // 是否显示步骤容器
       showStepContainer: false,
-      // 初始 C++ 代码，使用 ES6 模板字符串
-      code: `#include <iostream>
-  #include <string>
-  
-  using namespace std;
-  
-  class Person {
-  private:
-  int privateData; // 新增的私有属性
-  public:
-  string name;
-  int age;
-  char gender;
-  int* dynamicData; // 新增一个动态分配内存的属性
-  
-  // 构造函数
-  Person(const string& personName, int personAge, char personGender, int data) {
-      name = personName;
-      age = personAge;
-      gender = personGender;
-  
-      // 在堆区动态分配内存，并将 dynamicData 指向这块内存
-      dynamicData = new int;
-      *dynamicData = data;
-  
-      // 初始化私有属性
-      privateData = privateValue;
-  
-      cout << "人物已创建" << endl;
-  }
-  
-  // 析构函数
-  ~Person() {
-      // 释放动态分配的内存
-      delete dynamicData;
-      cout << "人物已销毁" << endl;
-  }
-  
-  // 拷贝构造函数 - 浅拷贝
-  Person(const Person& otherPerson) {
-      name = otherPerson.name;
-      age = otherPerson.age;
-      gender = otherPerson.gender;
-  
-      // 浅拷贝 dynamicData，两个对象共享相同的内存
-      //编译器默认实现的拷贝构造函数是浅拷贝，即下面这行代码。
-      dynamicData = otherPerson.dynamicData;
-      //调用析构函数时会有错误，因为dynamicData指向的是同一块内存，所以采用深拷贝来解决这一问题：即如果有属性在堆区开辟的，一定要自己提供拷贝构造函数。防止浅拷贝带来的内存泄漏。        cout << "浅拷贝构造函数" << endl;
-  
-      // 拷贝私有属性
-      privateData = otherPerson.privateData;
-      cout << "深拷贝构造函数" << endl;
-  }
-  
-  // 拷贝构造函数 - 深拷贝
-  Person(const Person& otherPerson) {
-      name = otherPerson.name;
-      age = otherPerson.age;
-      gender = otherPerson.gender;
-  
-      // 深拷贝 dynamicData，分配新的内存并复制数据
-      dynamicData = new int;
-      *dynamicData = *(otherPerson.dynamicData);
-  
-      cout << "深拷贝构造函数" << endl;
-  }
-  
-  // 公有方法，用于获取私有属性
-  int getPrivateData() const {
-      return privateData;
-  }
-  };
-  
-  int main() {
-  // 创建对象，传入动态分配内存的数据
-  Person personObject("Alice", 25, 'F', 42 , 100);
-  
-  // 直接访问对象的属性
-  cout << "直接访问对象的属性：" << personObject.name << ", " << personObject.age << ", " << personObject.gender << ", " << *(personObject.dynamicData) << ", " << personObject.getPrivateData() << endl;
-  // 创建对象指针
-  Person* personPointer = new Person("Bob", 30, 'M', 88 , 200);
-  
-  // 使用对象指针访问对象的属性
-  cout << "通过指针访问对象的属性：" << personPointer->name << ", " << personPointer->age << ", " << personPointer->gender << ", " << *(personPointer->dynamicData) << endl;
-  
-  // 浅拷贝
-  Person personCopy(personObject);
-  
-  // 深拷贝
-  Person personDeepCopy = *personPointer;
-  
-  // 释放动态分配的内存
-  delete personPointer;
-  
-  return 0;
-  }
-  `,
-
       // CodeMirror 的配置项
       editorOptions: {
         mode: 'text/x-c++src',
@@ -168,12 +71,15 @@ export default {
         gutters: ['my-gutter'] // gutter 配置
       },
       // 当前标记的行号索引
-      currentMarkedIndex: 0
+      currentMarkedIndex: 0,
+      currentFrame: 0, // 初始化或具体值
+      frames: [] // 初始化或具体值
     }
   },
   computed: {
     ...mapGetters([
-      'markedLines'
+      'markedLines',
+      'simulationcode'
     ])
   },
   watch: {

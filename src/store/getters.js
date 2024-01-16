@@ -34,7 +34,20 @@ const getters = {
   markedLines: state => state.markedList.markedLines,
 
   // 获取动画的frames
-  frames: state => state.animation.frames
+  frames: state => state.animation.frames,
+
+  // 获取填空题的code
+  fillincode: state => state.code.fillincode,
+
+  // 获取仿真code
+  simulationcode: state => state.code.simulationcode,
+
+  // 获取填空题的答案
+  fillinanswer: state => state.code.fillinanswer,
+
+  // 获取填空题的解释
+  fillinexplanation: state => state.code.fillinexplanation
+
 }
 
 export default getters
